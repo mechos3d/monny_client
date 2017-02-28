@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="Categories"
+        android:key="categories_list"
+        android:summary="categories, separated by commas please"
+        android:defaultValue="cat_01_default"></EditTextPreference>
+    <EditTextPreference android:title="Username"
+        android:key="username"
+        android:summary="summary"
+        android:defaultValue="default"></EditTextPreference>
+    <EditTextPreference android:title="create_record_route"
+        android:key="server_adr"
+        android:summary="summary"
+        android:defaultValue="default"></EditTextPreference>
+    <EditTextPreference android:title="get_records_list_route"
+        android:key="records_list_adr"
+        android:summary="summary"
+        android:defaultValue="default"></EditTextPreference>
+    <!--<CheckBoxPreference android:title="Application Updates"-->
+        <!--android:defaultValue="false"-->
+        <!--android:summary="This option if selected will allow the application to check for latest versions."-->
+        <!--android:key="applicationUpdates" />-->
+    <!--<ListPreference     android:title="Download Details"-->
+        <!--android:summary="Select the kind of data that you would like to download"-->
+        <!--android:key="downloadType"-->
+        <!--android:defaultValue="1"-->
+        <!--android:entries="@array/listArray"-->
+        <!--android:entryValues="@array/listValues" />-->
+</PreferenceScreen>

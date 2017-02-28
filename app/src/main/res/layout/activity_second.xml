@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:stretchColumns="*"
+        >
+        <TableRow
+            android:layout_weight="0.05"
+            android:gravity="center">
+            <Button android:text="Settings" android:id="@+id/settings_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="Sync" android:id="@+id/sync_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="CAT_1" android:id="@+id/cat_button_1" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="CAT_2" android:id="@+id/cat_button_2" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="CAT_3" android:id="@+id/cat_button_3" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="CAT_4" android:id="@+id/cat_button_4" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="CAT_5" android:id="@+id/cat_button_5" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="-- 1 --" android:id="@+id/change_cats_button" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="0.5"
+            android:gravity="center">
+            <EditText
+                android:id="@+id/category_text"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="text" />
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="Commit" android:id="@+id/commit_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="NULL" android:id="@+id/go_back_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
+

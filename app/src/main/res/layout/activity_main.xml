@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:stretchColumns="*"
+        >
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="10" android:id="@+id/button_1" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="50" android:id="@+id/button_2" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="100" android:id="@+id/button_3" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="200" android:id="@+id/button_4" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <Button android:text="300" android:id="@+id/button_5" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="400" android:id="@+id/button_6" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <com.example.gorg.monny.Button_1000 android:text="500" android:id="@+id/button_7" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <com.example.gorg.monny.Button_1000 android:text="1000" android:id="@+id/button_1000" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+        <TableRow
+            android:layout_weight="1"
+            android:gravity="center">
+            <com.example.gorg.monny.ButtonExtended android:text="0" android:textSize="15dp" android:id="@+id/current_sum" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="Next screen" android:id="@+id/next_screen" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
+
