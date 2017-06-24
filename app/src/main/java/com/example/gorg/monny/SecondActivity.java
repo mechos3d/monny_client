@@ -135,8 +135,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void writeToFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String string = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + getDataFromEditText();
+        String string = createSyncString();
 
         File file = new File(getExternalFilesDir(null), dataFileName);
         if(!file.exists()) {
@@ -152,6 +151,13 @@ public class SecondActivity extends AppCompatActivity {
         } finally {
             pw.close();
         }
+    }
+
+    private String createSyncString() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+        String result = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + getDataFromEditText();
+
+        return result;
     }
 
     private void syncWithServer() {

@@ -112,13 +112,15 @@ public class SyncService {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            int updated_sum = response.getInt("updated_sum");
+                            JSONObject updated_sums = response.getJSONObject("updated_sums");
                             int created_objects = response.getInt("created");
-                            updateCurrentTotalSum(updated_sum);
-                            Toast.makeText(context, "Synced ! Updated_sum: " + updated_sum, Toast.LENGTH_SHORT).show();
+
+                            updateCurrentTotalSums(updated_sums);
+
+                            Toast.makeText(context, "Synced ! ", Toast.LENGTH_SHORT).show();
                             MainActivity.updateCurrentSumonNextScreenButton();
                             if (created_objects > 0) {
-                                markSyncTimeInDataFile(updated_sum, created_objects);
+                                markSyncTimeInDataFile(updated_sums, created_objects);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -135,16 +137,22 @@ public class SyncService {
         Singleton.getInstance(context).addToRequestQueue(req);
     }
 
-    private void updateCurrentTotalSum(int updated_sum){
+    private void updateCurrentTotalSums(JSONObject updated_sums) throws JSONException {
         // TODO: Broken encapsulation, take settings to some Singleton maybe ?
         SharedPreferences.Editor editor = SecondActivity.settingsPersistence.edit();
-        editor.putInt ("total_sum", updated_sum);
+
+        String authors_str = app_settings.getString("authors_list", "");
+        String[] authors = authors_str.split(",");
+            for(String author : authors ){
+                int sum = updated_sums.getInt(author);
+                editor.putInt (author, sum);
+            }
         editor.commit();
     }
 
-    private void markSyncTimeInDataFile(int updated_sum, int created_objects) throws IOException {
+    private void markSyncTimeInDataFile(JSONObject updated_sums, int created_objects) throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String string = "synced;" + timeStamp + "created: " + created_objects + " sum: " + updated_sum;
+        String string = "synced;" + timeStamp + "created: " + created_objects + " sum: " + updated_sums;
 
         PrintWriter pw = null;
         try {

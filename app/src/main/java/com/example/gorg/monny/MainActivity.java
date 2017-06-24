@@ -2,6 +2,7 @@ package com.example.gorg.monny;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,29 +14,33 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     private static SharedPreferences settingsPersistence;
     private static Button button_next;
+    public static SharedPreferences appSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        appSettings = PreferenceManager.getDefaultSharedPreferences(this);
         settingsPersistence = getSharedPreferences(VarStorage.PREFS_FILE_NAME, 0);
+        button_next=(Button)findViewById(R.id.next_screen);
         VarStorage.current_sum = 0;
         VarStorage.current_sign = "-";
         setOnClickListeners();
-        showCurrentSumOnNextScreenButton();
+        updateCurrentSumonNextScreenButton();
         VarStorage.mainActivity = this;
     }
 
     public static void updateCurrentSumonNextScreenButton() {
-        int sum = settingsPersistence.getInt("total_sum", -777);
-        button_next.setText(sum + "");
-    }
+        String result = "";
+        String authors_str = appSettings.getString("authors_list", "");
+        String[] authors = authors_str.split(",");
 
-    private void showCurrentSumOnNextScreenButton(){
-        button_next=(Button)findViewById(R.id.next_screen);
-        int sum = settingsPersistence.getInt("total_sum", -777);
-        button_next.setText(sum + "");
+        for(String author : authors ){
+            int sum = settingsPersistence.getInt(author, 0);
+            result = result + author + ": " + sum + " \n";
+        }
+        button_next.setText(result);
     }
 
     public void addToCounter(int number) {
