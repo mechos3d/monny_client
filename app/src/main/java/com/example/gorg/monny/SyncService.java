@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -21,15 +22,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.security.interfaces.RSAKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class SyncService {
 
     private static SharedPreferences app_settings;
     private static String URL;
+    private static String AUTH_TOKEN;
     private Context context;
     private File dataFile;
     private List<String> linesToSend;
@@ -39,7 +46,8 @@ public class SyncService {
         dataFile = file;
         this.context = context;
         app_settings = PreferenceManager.getDefaultSharedPreferences(context);
-        URL = app_settings.getString("server_adr","");
+        URL = app_settings.getString("server_adr", "");
+        AUTH_TOKEN = app_settings.getString("auth_token", "");
     }
 
     public void perform() {
@@ -107,31 +115,41 @@ public class SyncService {
     }
 
     private void sendJson() {
-        JsonObjectRequest req = new JsonObjectRequest(URL, jsonToSend,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONObject updated_sums = response.getJSONObject("updated_sums");
-                            int created_objects = response.getInt("created");
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject updated_sums = response.getJSONObject("updated_sums");
+                    int created_objects = response.getInt("created");
 
-                            updateCurrentTotalSums(updated_sums);
+                    updateCurrentTotalSums(updated_sums);
 
-                            Toast.makeText(context, "Synced ! ", Toast.LENGTH_SHORT).show();
-                            MainActivity.updateCurrentSumonNextScreenButton();
-                            if (created_objects > 0) {
-                                markSyncTimeInDataFile(updated_sums, created_objects);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    Toast.makeText(context, "Synced ! ", Toast.LENGTH_SHORT).show();
+                    MainActivity.updateCurrentSumonNextScreenButton();
+                    if (created_objects > 0) {
+                        markSyncTimeInDataFile(updated_sums, created_objects);
                     }
-                }, new Response.ErrorListener() {
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("Error: ", error.getMessage());
             }
-        });
+        };
+
+        JsonObjectRequest req = new JsonObjectRequest(URL, jsonToSend, listener , errorListener){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token token=" + AUTH_TOKEN);
+                return headers;
+            }
+        };
 
         // Access the RequestQueue through singleton class.
         Singleton.getInstance(context).addToRequestQueue(req);

@@ -12,12 +12,12 @@
     android:key="authors_list"
     android:summary="authors, separated by commas please"
     android:defaultValue="Author1,Author2"></EditTextPreference>
-    <EditTextPreference android:title="create_record_route"
+    <EditTextPreference android:title="Records route"
         android:key="server_adr"
         android:summary="summary"
         android:defaultValue="default"></EditTextPreference>
-    <EditTextPreference android:title="get_records_list_route"
-        android:key="records_list_adr"
-        android:summary="summary"
+    <EditTextPreference android:title="Authorization token"
+        android:key="auth_token"
+        android:summary="you know.. for authorization"
         android:defaultValue="default"></EditTextPreference>
 </PreferenceScreen>

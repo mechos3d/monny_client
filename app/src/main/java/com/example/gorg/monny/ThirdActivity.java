@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,11 +18,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // TODO: make this save records list in a local file, updating it when needed
 public class ThirdActivity extends AppCompatActivity {
 
     private static SharedPreferences app_settings;
     private static String URL;
+    private static String AUTH_TOKEN;
     private static Context context;
     private static TextView recordsList;
 
@@ -30,7 +35,8 @@ public class ThirdActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
         app_settings = PreferenceManager.getDefaultSharedPreferences(this);
-        URL = app_settings.getString("records_list_adr","");
+        URL = app_settings.getString("server_adr","");
+        AUTH_TOKEN = app_settings.getString("auth_token", "");
         context = this;
 
         recordsList=(TextView)findViewById(R.id.records_history);
@@ -39,22 +45,31 @@ public class ThirdActivity extends AppCompatActivity {
     }
 
     private void getRecordsList() {
-        JsonArrayRequest jsObjRequest = new JsonArrayRequest
-                (Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-
+        Response.Listener<JSONArray> responseListener = new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         updateRecordsList(response);
                     }
-                }, new Response.ErrorListener() {
+                };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println(error.toString());
                     }
-                });
+                };
+
+        JsonArrayRequest jsObjRequest = new JsonArrayRequest
+                (Request.Method.GET, URL, null, responseListener, errorListener){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<String, String>();
+                    headers.put("Authorization", "Token token=" + AUTH_TOKEN);
+                    return headers;
+                }
+        };
         // Access the RequestQueue through singleton class.
         Singleton.getInstance(context).addToRequestQueue(jsObjRequest);
-
     }
 
     private void updateRecordsList(JSONArray response){
