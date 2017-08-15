@@ -71,8 +71,9 @@ public class ThirdActivity extends AppCompatActivity {
                 String category = record.getString("category");
                 String author = record.getString("author");
                 String text = record.getString("text");
+                String itemId = record.getString("id");
 
-                fullString += time + " | " + sign + " " + amount + " | " + category + " | " + author + " | " + text + "\n";
+                fullString += time + " | " + sign + " " + amount + " | " + category + " | " + author + " | " + text + " | " + itemId + "\n";
             }
         } catch (JSONException e) {
         e.printStackTrace();
