@@ -39,15 +39,16 @@
             android:gravity="center">
             <EditText
                 android:id="@+id/category_text"
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="fill_parent"
                 android:inputType="text" />
         </TableRow>
         <TableRow
             android:layout_weight="1"
             android:gravity="center">
-            <Button android:text="Commit" android:id="@+id/commit_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
             <Button android:text="NULL" android:id="@+id/go_back_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+            <Button android:text="Commit" android:id="@+id/commit_btn" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
         </TableRow>
     </TableLayout>
 </LinearLayout>
