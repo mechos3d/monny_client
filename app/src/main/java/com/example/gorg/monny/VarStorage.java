@@ -7,8 +7,9 @@ public class VarStorage {
     public static String current_sign = "-";
     public static final String PREFS_FILE_NAME = "monny_data";
 
-    // dirty-dirty-dirty HACK to reach MainActivity's counter from Button_1000GestureListener
+    // dirty-dirty-dirty HACK to reach Activity's methods from Button_1000GestureListener and ButtonChangeCatsGestureListener
     public static MainActivity mainActivity;
+    public static SecondActivity secondActivity;
 
     public static void change_current_sign(){
         if(current_sign == "-"){

@@ -1,15 +1,20 @@
 package com.example.gorg.monny;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 
-public class Button_1000GestureListener implements
+public class ButtonChangeCatsGestureListener implements
         GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     protected Button button;
 
-    public Button_1000GestureListener(Button b){
+    public ButtonChangeCatsGestureListener(Button b){
         super();
         button = b;
     }
@@ -22,10 +27,7 @@ public class Button_1000GestureListener implements
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {
-        String str = button.getText().toString();
-        int num = Integer.parseInt(str);
-        num *= 10;
-        VarStorage.mainActivity.addToCounter(num);
+        VarStorage.secondActivity.handleTransferCategory();
         return true;
     }
 
@@ -50,7 +52,7 @@ public class Button_1000GestureListener implements
 
     @Override
     public boolean onDoubleTap(MotionEvent event) {
-        performSingleTapAction(2);
+        performSingleTapAction();
         return true;
     }
 
@@ -61,13 +63,11 @@ public class Button_1000GestureListener implements
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
-        performSingleTapAction(1);
+        performSingleTapAction();
         return true;
     }
 
-    private void performSingleTapAction(int n) {
-        String str = button.getText().toString();
-        int num = Integer.parseInt(str) * n;
-        VarStorage.mainActivity.addToCounter(num);
+    private void performSingleTapAction() {
+        VarStorage.secondActivity.switchCategoryButtons();
     }
 }

@@ -1,13 +1,18 @@
 package com.example.gorg.monny;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +21,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.TableLayout;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -24,6 +31,8 @@ public class SecondActivity extends AppCompatActivity {
     public static SharedPreferences appSettings;
     public static SharedPreferences settingsPersistence;
     private static int currentCategoriesSet = 1;
+
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +44,8 @@ public class SecondActivity extends AppCompatActivity {
 
         setCounterOnScreen();
         setOnClickListeners();
+
+        VarStorage.secondActivity = this;
     }
 
     // NOTE: I store current total_sum in preferences file, it's not a preference,
@@ -76,7 +87,7 @@ public class SecondActivity extends AppCompatActivity {
         return categoriesString.split(",");
     }
 
-    private void switchCategoryButtons() {
+    public void switchCategoryButtons() {
         Button b1,b2,b3,b4,b5;
         b1=(Button)findViewById(R.id.cat_button_1);
         b2=(Button)findViewById(R.id.cat_button_2);
@@ -192,7 +203,6 @@ public class SecondActivity extends AppCompatActivity {
             b.setOnClickListener(new ButtonListener(b));
         }
 
-        Button changeCatsButton = (Button)findViewById(R.id.change_cats_button);
         Button back_button = (Button)findViewById(R.id.go_back_btn);
         Button commit_button = (Button)findViewById(R.id.commit_btn);
         Button settings_button = (Button)findViewById(R.id.settings_btn);
@@ -202,8 +212,28 @@ public class SecondActivity extends AppCompatActivity {
         commit_button.setOnClickListener(new CommitButtonListener());
         settings_button.setOnClickListener(new SettingsButtonListener());
         sync_button.setOnClickListener(new SyncButtonListener());
-        changeCatsButton.setOnClickListener(new ChangeCatsButtonListener());
     }
+
+    public void handleTransferCategory() {
+        Context context = getApplicationContext();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        // Inflate the custom layout/view
+        View dialogTransferView = inflater.inflate(R.layout.dialog_transfer,null);
+
+        // LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+        mPopupWindow = new PopupWindow(dialogTransferView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT );
+
+        mPopupWindow.setTouchable(true);
+        mPopupWindow.setFocusable(true);
+
+        // Set an elevation value for popup window
+        // Call requires API level 21
+        if(Build.VERSION.SDK_INT>=21){ mPopupWindow.setElevation(5.0f); }
+
+        TableLayout secondActivityTableLayout = (TableLayout) findViewById(R.id.second_activity_table_layout);
+        mPopupWindow.showAtLocation(secondActivityTableLayout, Gravity.CENTER,0,0);
+     }
 
     class ButtonListener implements View.OnClickListener {
         private Button button;
@@ -256,15 +286,6 @@ public class SecondActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             syncWithServer();
-        }
-    }
-
-    class ChangeCatsButtonListener implements View.OnClickListener {
-        public ChangeCatsButtonListener() {
-        }
-        @Override
-        public void onClick(View view) {
-            switchCategoryButtons();
         }
     }
 

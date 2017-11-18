@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/home/gorg/my_stuff/monny/volley/src/main/assets"/><source path="/home/gorg/my_stuff/monny/volley/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/home/gorg/my_stuff/monny/volley/src/release/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/gorg/AndroidStudioProjects/monny2/volley/src/main/assets"/><source path="/home/gorg/AndroidStudioProjects/monny2/volley/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/home/gorg/AndroidStudioProjects/monny2/volley/src/release/assets"/></dataSet></merger>
