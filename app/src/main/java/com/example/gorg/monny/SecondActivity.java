@@ -87,6 +87,10 @@ public class SecondActivity extends AppCompatActivity {
         return categoriesString.split(",");
     }
 
+    public void setCategory(String str) {
+        this.category = str;
+    }
+
     public void switchCategoryButtons() {
         Button b1,b2,b3,b4,b5;
         b1=(Button)findViewById(R.id.cat_button_1);
@@ -215,25 +219,56 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void handleTransferCategory() {
+        createTransferDialogPopupWindow();
+     }
+
+    private void createTransferDialogPopupWindow() {
+
         Context context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        // Inflate the custom layout/view
         View dialogTransferView = inflater.inflate(R.layout.dialog_transfer,null);
-
-        // LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         mPopupWindow = new PopupWindow(dialogTransferView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT );
-
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
 
-        // Set an elevation value for popup window
-        // Call requires API level 21
-        if(Build.VERSION.SDK_INT>=21){ mPopupWindow.setElevation(5.0f); }
+
+        if(Build.VERSION.SDK_INT>=21){ mPopupWindow.setElevation(5.0f); } // Set an elevation value for popup window ( Call requires API level 21 )
 
         TableLayout secondActivityTableLayout = (TableLayout) findViewById(R.id.second_activity_table_layout);
+
+        Button transfer_dialog_ok_button = (Button) dialogTransferView.findViewById(R.id.transfer_dialog_ok);
+        //transfer_dialog_ok_button.setOnClickListener( new TransferDialogOkButton(mPopupWindow));
+
+        transfer_dialog_ok_button.setOnClickListener( new TransferDialogOkButton(dialogTransferView, mPopupWindow));
+
         mPopupWindow.showAtLocation(secondActivityTableLayout, Gravity.CENTER,0,0);
-     }
+    }
+
+    class TransferDialogOkButton implements View.OnClickListener {
+        private View dialogTransferView;
+        private PopupWindow popup;
+
+        public TransferDialogOkButton(View v, PopupWindow p) {
+            super();
+            dialogTransferView = v;
+            popup = p;
+        }
+
+        @Override
+        public void onClick(View view) {
+            EditText fromText = (EditText) dialogTransferView.findViewById(R.id.transfer_dialog_from_author);
+            EditText toText = (EditText) dialogTransferView.findViewById(R.id.transfer_dialog_to_author);
+
+            String fromTextString = fromText.getText().toString();
+            String toTextString = toText.getText().toString();
+
+            String fullTransferCategory = "transfer" + "__" + fromTextString + "__" + toTextString;
+            VarStorage.secondActivity.setCategory(fullTransferCategory);
+
+            popup.dismiss();
+        }
+    }
 
     class ButtonListener implements View.OnClickListener {
         private Button button;
