@@ -33,6 +33,7 @@ public class ButtonChangeCatsGestureListener implements
 
     @Override
     public void onLongPress(MotionEvent event) {
+        VarStorage.secondActivity.handleAuthorOverride();
     }
 
     @Override

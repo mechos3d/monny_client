@@ -100,11 +100,10 @@ public class SyncService {
                 record.put("sign", arr[1]);
                 record.put("amount", arr[2]);
                 record.put("category", arr[3]);
-                if (arr.length > 4) {
-                    record.put("text", arr[4]);
+                record.put("author", arr[4]);
+                if (arr.length > 5) {
+                    record.put("text", arr[5]);
                 }
-                String author = app_settings.getString("username", "unset");
-                record.put("author", author);
                 recordsJson.put(record);
             }
             syncJson.put("records", recordsJson);

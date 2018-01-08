@@ -32,6 +32,7 @@ public class SecondActivity extends AppCompatActivity {
     public static SharedPreferences settingsPersistence;
     private static int currentCategoriesSet = 1;
 
+    private String authorOverride;
     private PopupWindow mPopupWindow;
 
     @Override
@@ -45,6 +46,7 @@ public class SecondActivity extends AppCompatActivity {
         setCounterOnScreen();
         setOnClickListeners();
 
+        authorOverride = "null";
         VarStorage.secondActivity = this;
     }
 
@@ -170,9 +172,17 @@ public class SecondActivity extends AppCompatActivity {
 
     private String createSyncString() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String result = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + getDataFromEditText();
+        String result = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + recordAuthor() + ";" + getDataFromEditText();
 
         return result;
+    }
+
+    private String recordAuthor() {
+        if (authorOverride != "null") {
+            return authorOverride;
+        } else {
+            return appSettings.getString("username", "unset");
+        }
     }
 
     private void syncWithServer() {
@@ -219,31 +229,36 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     public void handleTransferCategory() {
-        createTransferDialogPopupWindow();
+        View popupView = createPopupWindow(R.layout.dialog_transfer);
+
+        Button ok_button = (Button) popupView.findViewById(R.id.transfer_dialog_ok);
+        ok_button.setOnClickListener( new TransferDialogOkButton(popupView, mPopupWindow));
      }
 
-    private void createTransferDialogPopupWindow() {
+    public void handleAuthorOverride() {
+        View popupView = createPopupWindow(R.layout.dialog_author_override);
 
+        Button ok_button = (Button) popupView.findViewById(R.id.author_override_dialog_ok);
+        ok_button.setOnClickListener( new AuthorOverrideDialogOkButton(popupView, mPopupWindow));
+    }
+
+    private View createPopupWindow(int layoutName) {
         Context context = getApplicationContext();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
 
-        View dialogTransferView = inflater.inflate(R.layout.dialog_transfer,null);
+        View dialogTransferView = inflater.inflate(layoutName, null);
         mPopupWindow = new PopupWindow(dialogTransferView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT );
         mPopupWindow.setTouchable(true);
         mPopupWindow.setFocusable(true);
-
 
         if(Build.VERSION.SDK_INT>=21){ mPopupWindow.setElevation(5.0f); } // Set an elevation value for popup window ( Call requires API level 21 )
 
         TableLayout secondActivityTableLayout = (TableLayout) findViewById(R.id.second_activity_table_layout);
 
-        Button transfer_dialog_ok_button = (Button) dialogTransferView.findViewById(R.id.transfer_dialog_ok);
-        //transfer_dialog_ok_button.setOnClickListener( new TransferDialogOkButton(mPopupWindow));
-
-        transfer_dialog_ok_button.setOnClickListener( new TransferDialogOkButton(dialogTransferView, mPopupWindow));
-
         mPopupWindow.showAtLocation(secondActivityTableLayout, Gravity.CENTER,0,0);
+        return dialogTransferView;
     }
+
 
     class TransferDialogOkButton implements View.OnClickListener {
         private View dialogTransferView;
@@ -265,6 +280,31 @@ public class SecondActivity extends AppCompatActivity {
 
             String fullTransferCategory = "transfer" + "__" + fromTextString + "__" + toTextString;
             VarStorage.secondActivity.setCategory(fullTransferCategory);
+
+            popup.dismiss();
+        }
+    }
+
+    class AuthorOverrideDialogOkButton implements View.OnClickListener {
+        private View dialogTransferView;
+        private PopupWindow popup;
+
+        public AuthorOverrideDialogOkButton(View v, PopupWindow p) {
+            super();
+            dialogTransferView = v;
+            popup = p;
+        }
+
+        @Override
+        public void onClick(View view) {
+            EditText authorText = (EditText) dialogTransferView.findViewById(R.id.author_override_dialog_text_field);
+
+            String authorTextString = authorText.getText().toString();
+            if (authorTextString.equals("")) {
+                authorOverride = "null";
+            } else {
+                authorOverride = authorTextString;
+            }
 
             popup.dismiss();
         }
