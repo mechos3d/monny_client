@@ -28,6 +28,7 @@ public class SecondActivity extends AppCompatActivity {
 
     private static final String dataFileName = "monny_records_file.txt";
     private static String category = "null";
+    private static Boolean secret = false;
     public static SharedPreferences appSettings;
     public static SharedPreferences settingsPersistence;
     private static int currentCategoriesSet = 1;
@@ -93,6 +94,10 @@ public class SecondActivity extends AppCompatActivity {
         this.category = str;
     }
 
+    public void setSecret(Boolean value) {
+        this.secret = value;
+    }
+
     public void switchCategoryButtons() {
         Button b1,b2,b3,b4,b5;
         b1=(Button)findViewById(R.id.cat_button_1);
@@ -124,6 +129,18 @@ public class SecondActivity extends AppCompatActivity {
             setInitialCategoriesButtonText();
         }
     }
+
+    public void updateGoBackButton(){
+        int sum = VarStorage.current_sum;
+        Button counterButton = (Button) findViewById(R.id.go_back_btn);
+        String secretString = "";
+        if (secret) {
+            secretString = "\n(secret)";
+        }
+        String str = "" + sum + "\n" + category + secretString;
+        counterButton.setText("" + str);
+    }
+
 
     private void setCounterOnScreen(){
         int sum = VarStorage.current_sum;
@@ -172,7 +189,7 @@ public class SecondActivity extends AppCompatActivity {
 
     private String createSyncString() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-        String result = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + recordAuthor() + ";" + getDataFromEditText();
+        String result = timeStamp + ";" + VarStorage.current_sign + ";" + VarStorage.current_sum + ";" + category + ";" + recordAuthor() + ";" + secret +  ";" + getDataFromEditText();
 
         return result;
     }
@@ -196,26 +213,20 @@ public class SecondActivity extends AppCompatActivity {
         return categoryEditor.getText().toString();
     }
 
-    private void updateGoBackButton(){
-        int sum = VarStorage.current_sum;
-        Button counterButton = (Button) findViewById(R.id.go_back_btn);
-        String str = "" + sum + "\n" + category;
-        counterButton.setText("" + str);
-    }
 
     private void setOnClickListeners(){
-        Button b1,b2,b3,b4,b5;
+//        Button b1,b2,b3,b4,b5;
 
-        b1=(Button)findViewById(R.id.cat_button_1);
-        b2=(Button)findViewById(R.id.cat_button_2);
-        b3=(Button)findViewById(R.id.cat_button_3);
-        b4=(Button)findViewById(R.id.cat_button_4);
-        b5=(Button)findViewById(R.id.cat_button_5);
-        Button[] arr = new Button[] {b1, b2, b3, b4, b5};
-
-        for(Button b : arr ){
-            b.setOnClickListener(new ButtonListener(b));
-        }
+//        b1=(Button)findViewById(R.id.cat_button_1);
+//        b2=(Button)findViewById(R.id.cat_button_2);
+//        b3=(Button)findViewById(R.id.cat_button_3);
+//        b4=(Button)findViewById(R.id.cat_button_4);
+//        b5=(Button)findViewById(R.id.cat_button_5);
+//        Button[] arr = new Button[] {b1, b2, b3, b4, b5};
+//
+//        for(Button b : arr ){
+//            b.setOnClickListener(new ButtonListener(b));
+//        }
 
         Button back_button = (Button)findViewById(R.id.go_back_btn);
         Button commit_button = (Button)findViewById(R.id.commit_btn);

@@ -101,8 +101,9 @@ public class SyncService {
                 record.put("amount", arr[2]);
                 record.put("category", arr[3]);
                 record.put("author", arr[4]);
-                if (arr.length > 5) {
-                    record.put("text", arr[5]);
+                record.put("secret", arr[5]);
+                if (arr.length > 6) {
+                    record.put("text", arr[6]);
                 }
                 recordsJson.put(record);
             }

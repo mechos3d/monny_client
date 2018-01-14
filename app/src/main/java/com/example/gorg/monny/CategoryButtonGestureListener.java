@@ -1,15 +1,16 @@
 package com.example.gorg.monny;
 
+import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.widget.Button;
 
-public class ButtonChangeCatsGestureListener implements
+public class CategoryButtonGestureListener implements
         GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     protected Button button;
 
-    public ButtonChangeCatsGestureListener(Button b){
+    public CategoryButtonGestureListener(Button b){
         super();
         button = b;
     }
@@ -22,13 +23,14 @@ public class ButtonChangeCatsGestureListener implements
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {
-        VarStorage.secondActivity.handleTransferCategory();
         return true;
     }
 
     @Override
     public void onLongPress(MotionEvent event) {
-        VarStorage.secondActivity.handleAuthorOverride();
+        SecondActivity secActivity =  VarStorage.secondActivity;
+        secActivity.setSecret(true);
+        sendSetCategory(secActivity);
     }
 
     @Override
@@ -48,7 +50,6 @@ public class ButtonChangeCatsGestureListener implements
 
     @Override
     public boolean onDoubleTap(MotionEvent event) {
-        performSingleTapAction();
         return true;
     }
 
@@ -59,11 +60,15 @@ public class ButtonChangeCatsGestureListener implements
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
-        performSingleTapAction();
+        SecondActivity secActivity =  VarStorage.secondActivity;
+        secActivity.setSecret(false);
+        sendSetCategory(secActivity);
         return true;
     }
 
-    private void performSingleTapAction() {
-        VarStorage.secondActivity.switchCategoryButtons();
+    private void sendSetCategory(SecondActivity activity) {
+        activity.setCategory(button.getText().toString());
+        activity.updateGoBackButton();
     }
+
 }
